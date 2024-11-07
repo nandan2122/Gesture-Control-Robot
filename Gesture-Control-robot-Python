@@ -1,0 +1,97 @@
+#include <Servo.h>
+
+// Create servo objects for each wheel of the robot
+Servo servo1;  // Left Front
+Servo servo2;  // Right Front
+Servo servo3;  // Left Rear
+Servo servo4;  // Right Rear
+
+// Define the gesture input pins (modify based on your setup)
+const int forwardPin = 2;
+const int backwardPin = 3;
+const int leftPin = 4;
+const int rightPin = 5;
+
+// Define servo pin connections
+const int servo1Pin = 6;
+const int servo2Pin = 7;
+const int servo3Pin = 8;
+const int servo4Pin = 9;
+
+// Servo movement angles
+const int stopAngle = 90;      // Neutral position (stop)
+const int forwardAngle = 120;  // Forward position
+const int backwardAngle = 60;  // Backward position
+
+void setup() {
+  // Attach servos to their respective pins
+  servo1.attach(servo1Pin);
+  servo2.attach(servo2Pin);
+  servo3.attach(servo3Pin);
+  servo4.attach(servo4Pin);
+
+  // Set gesture input pins
+  pinMode(forwardPin, INPUT);
+  pinMode(backwardPin, INPUT);
+  pinMode(leftPin, INPUT);
+  pinMode(rightPin, INPUT);
+
+  // Set initial servo positions to stop
+  stopMovement();
+}
+
+void loop() {
+  // Read gesture inputs
+  bool forwardGesture = digitalRead(forwardPin);
+  bool backwardGesture = digitalRead(backwardPin);
+  bool leftGesture = digitalRead(leftPin);
+  bool rightGesture = digitalRead(rightPin);
+
+  // Control movement based on gestures
+  if (forwardGesture) {
+    moveForward();
+  } else if (backwardGesture) {
+    moveBackward();
+  } else if (leftGesture) {
+    turnLeft();
+  } else if (rightGesture) {
+    turnRight();
+  } else {
+    stopMovement();  // Stop if no gesture is detected
+  }
+}
+
+void moveForward() {
+  servo1.write(forwardAngle);
+  servo2.write(forwardAngle);
+  servo3.write(forwardAngle);
+  servo4.write(forwardAngle);
+}
+
+void moveBackward() {
+  servo1.write(backwardAngle);
+  servo2.write(backwardAngle);
+  servo3.write(backwardAngle);
+  servo4.write(backwardAngle);
+}
+
+void turnLeft() {
+  servo1.write(backwardAngle);
+  servo2.write(forwardAngle);
+  servo3.write(backwardAngle);
+  servo4.write(forwardAngle);
+}
+
+void turnRight() {
+  servo1.write(forwardAngle);
+  servo2.write(backwardAngle);
+  servo3.write(forwardAngle);
+  servo4.write(backwardAngle);
+}
+
+void stopMovement() {
+  servo1.write(stopAngle);
+  servo2.write(stopAngle);
+  servo3.write(stopAngle);
+  servo4.write(stopAngle);
+}
